@@ -1,0 +1,118 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+
+<body>
+
+
+    <!-- Page Header Start -->
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Shopping Cart</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="/">Home</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Shopping Cart</p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+
+    <!-- Cart Start -->
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            <div class="col-lg-8 table-responsive mb-5">
+                <table class="table table-bordered text-center mb-0">
+                    <thead class="bg-secondary text-dark">
+                        <tr>
+                            <th>Products</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                        {%for i in carts %}
+                        <tr>
+                            <td class="align-middle"><img src="{{i.product.product_image.url}}" alt="" style="width: 50px;">{{i.product.product_name}}</td>
+                            <td class="align-middle">{{i.product_price}}</td>
+                            <td class="align-middle">
+                                <div class="input-group quantity mx-auto" style="width: 100px;">
+                                    <form name="change-qty" method="post" action="{% url 'change-qty' pk=i.pk %}">
+                                        {% csrf_token %}
+                                        <input type="number" class="form-control form-control-sm bg-secondary text-center" value="{{i.product_qty}}" name="product_qty" min="1" max="10" onchange="this.form.submit();">
+                                    </form>
+                                </div>
+                            </td>
+                            <td class="align-middle">{{i.total_price}}</td>
+                            <td class="align-middle"><a href="{% url 'remove-from-cart' pk=i.product.pk %}"><button class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></a></td>
+                        </tr>
+                        
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-4">
+                <div class="card border-secondary mb-5">
+                    <div class="card-footer border-secondary bg-transparent">
+                        <div class="d-flex justify-content-between mt-2">
+                            <h5 class="font-weight-bold">Total</h5>
+                            <h5 class="font-weight-bold">{{net_price}}</h5>
+                        </div>
+                        <form action="{% url 'create_checkout_session' %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary" font-weight-bold my-3 py-3>Proceed Checkout</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Cart End -->
+    <script type="text/javascript">
+
+        var stripe = Stripe('pk_test_51MshH6SJuXwPfjjrrgxJ5tubbOgYAhRrqNcd4RDUSq1peWpIMZrjhIiTncSUWO9u6byeDf4KxdZPkFD4hU55mVOg00aRL5RT8x');
+        var checkoutButton = document.getElementById('checkout-button');
+
+        checkoutButton.addEventListener('click', function () {
+            fetch('/create-checkout-session/', {
+            method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest', //Necessary to work with request.is_ajax()
+
+                },
+                body: JSON.stringify({ 'post_data': '{{net_price}}' })
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (session) {
+                    window.location.href = session.url;
+                })
+                .then(function (result) {
+                    // If `redirectToCheckout` fails due to a browser or network
+                    // error, you should display the localized error message to your
+                    // customer using `error.message`.
+                    if (result.error) {
+                        alert(result.error.message);
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+
+
+</body>
+</html>
+{% endblock %}

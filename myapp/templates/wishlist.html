@@ -1,0 +1,84 @@
+{% extends 'header.html' %}
+
+{% load static %}
+
+{% block content%}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+</head>
+
+<body>
+
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="/">Home</a>
+                    <a class="breadcrumb-item text-dark" href="#">Shop</a>
+                    <span class="breadcrumb-item active">Wish List</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+
+    <!-- Shop Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <!-- Shop Sidebar Start -->
+
+            <!-- Shop Sidebar End -->
+
+
+            <!-- Shop Product Start -->
+            <div class="col-lg-9 col-md-8">
+                <div class="row pb-3">
+                    {% if wishlist %}
+                    {% for i in wishlist %}
+                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                        <div class="product-item bg-light mb-4">
+                            <div class="product-img position-relative overflow-hidden">
+                                <img class="img-fluid w-100" src="{{i.product.product_image.url}}" alt=""
+                                    style="width: 250px; height: 250px;">
+                                <div class="product-action">
+                                    {% if request.session.email %}
+                                    <a class="btn btn-outline-dark btn-square"
+                                        href="{% url 'remove-from-wishlist' pk=i.product.pk %}"><i class="far fa-heart"></i></a>
+                                    {% endif %}
+                                    <a class="btn btn-outline-dark btn-square"
+                                        href="{% url 'product-details' pk=i.product.pk %}"><i
+                                            class="fa fa-info"></i></a>
+
+                                </div>
+                            </div>
+                            <div class="text-center py-4">
+                                <a class="h6 text-decoration-none text-truncate" href="{% url 'product-details' pk=i.product.pk %}">{{i.product.product_name}}</a>
+                                <div class="d-flex align-items-center justify-content-center mt-2">
+                                    <h5>₹ {{i.product.product_price}}</h5>
+                                    <h6 class="text-muted ml-2"></h6>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <h1>No Products in Wishlists. Keep Shopping !!</h1>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- Shop Product End -->
+        </div>
+    </div>
+    <!-- Shop End -->
+
+</body>
+
+</html>
+{% endblock %}

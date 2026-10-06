@@ -1,0 +1,97 @@
+{% extends 'seller-header.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+    <!-- Page Header Start -->
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Edit Product</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="/">Home</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Edit Product</p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+
+    <!-- Contact Start -->
+    <div class="container-fluid pt-5">
+        <div class="text-center mb-4">
+            <h2 class="section-title px-5"><span class="px-2">Edit Product</span></h2>
+        </div>
+        <div class="row px-xl-5">
+            <div class="col-lg-12 mb-5">
+                <div class="contact-form">
+                    <div id="success"></div>
+                    {% if msg %}
+                        <b style="color: blue;">{{msg}}</b>
+                    {% endif %}
+                    <form name="sentMessage" method="POST" action='{% url 'seller-product-edit' pk=product.pk %}' enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="control-group">
+                            <select name="product_catagory" class="form-control">
+                                {% if product.product_category == "Men" %}
+                                    <option>---Select Product Catagory---</option>
+                                    <option value="Men" selected>Men</option>
+                                    <option value="Women">Women</option>
+                                    <option value="Kids">Kids</option>
+                                    <option value="Others">Others</option>
+                                {% elif product.product_category == "Women" %}
+                                    <option>---Select Product Catagory---</option>
+                                    <option value="Men">Men</option>
+                                    <option value="Women" selected>Women</option>
+                                    <option value="Kids">Kids</option>
+                                    <option value="Others">Others</option>
+                                {% elif product.product_category == "Kids" %}
+                                    <option>---Select Product Catagory---</option>
+                                    <option value="Men">Men</option>
+                                    <option value="Women">Women</option>
+                                    <option value="Kids" selected>Kids</option>
+                                    <option value="Others">Others</option>
+                                {% elif product.product_category == "Others" %}
+                                    <option>---Select Product Catagory---</option>
+                                    <option value="Men">Men</option>
+                                    <option value="Women">Women</option>
+                                    <option value="Kids">Kids</option>
+                                    <option value="Others" selected>Others</option>
+                                {% endif %}
+                                
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <input type="text" class="form-control" id="name" value="{{product.product_name}}" name="product_name" />
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div class="control-group">
+                            <input type="text" class="form-control" id="name" value="{{product.product_price}}" name="product_price" />
+                            <p class="help-block text-danger"></p>                  
+                        </div>
+                        <div class="control-group">
+                            <textarea class="form-control" rows="6" id="message" name="product_desc">{{product.product_desc}}</textarea>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div class="control-group">
+                            <img src="{{product.product_image.url}}" style="width: 100px;height: 100px;border-radius: 50;">
+                        </div>
+                        <div class="control-group">
+                            <input type="file" class="form-control" id="subject" name="product_image" />
+                            <p class="help-block text-danger"></p>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Update Product</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Contact End -->
+</body>
+</html>
+{% endblock %}

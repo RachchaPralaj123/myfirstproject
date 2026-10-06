@@ -1,0 +1,82 @@
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+
+<body>
+
+    <!-- Page Header Start -->
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Shop</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="/">Home</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Shop</p>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+
+    <!-- Shop Start -->
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            <!-- Shop Sidebar Start -->
+            <div class="col-lg-3 col-md-12">
+                <!-- Price Start -->
+                <div class="border-bottom mb-4 pb-4">
+                    <h5 class="font-weight-semi-bold mb-4">Filter by Catagory</h5>
+                    
+                        
+                            <a href="{% url 'catagory' cat='all' %}" style="color: blue;">All</a><br><br>
+                            <a href="{% url 'catagory' cat='Men' %}" style="color: blue;">Men</a><br><br>
+                            <a href="{% url 'catagory' cat='Women' %}" style="color: blue;">Women</a><br><br>
+                            <a href="{% url 'catagory' cat='Kids' %}" style="color: blue;">Kids</a><br><br>
+                            <a href="{% url 'catagory' cat='Others' %}" style="color: blue;">Others</a>
+                        
+                        
+                    
+                </div>
+                <!-- Price End -->
+                
+            </div>
+            <!-- Shop Sidebar End -->
+
+
+            <!-- Shop Product Start -->
+            <div class="col-lg-9 col-md-12">
+                <div class="row pb-3">
+                    {% for i in products %}
+                    <div class="col-lg-4 col-md-6 col-sm-12 pb-1">
+                        <div class="card product-item border-0 mb-4">
+                            <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                                <img class="img-fluid w-100" src="{{i.product_image.url}}" alt="" style="height: 450px;">
+                            </div>
+                            <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+                                <h6 class="text-truncate mb-3">{{i.product_name}}</h6>
+                                <div class="d-flex justify-content-center">
+                                    <h6>{{i.product_price}}</h6><h6 class="text-muted ml-2">{{i.product_name}}</h6>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between bg-light border">
+                                
+                                <a href="{% url 'product-details' pk=i.pk %}" class="btn btn-sm text-dark p-0"><i class="fas fa-info-circle text-primary mr-1"></i>View Detail</a>
+                            </div>
+                        </div>
+                    </div>
+                  {% endfor %}
+                    
+                </div>
+            </div>
+            <!-- Shop Product End -->
+        </div>
+    </div>
+    <!-- Shop End -->
+</body>
+</html>
+{% endblock %}
